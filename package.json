@@ -1,0 +1,62 @@
+{
+    "name": "19.films-test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "cross-env NODE_ENV=prod node ./src/index.ts",
+        "dev": "node --watch --env-file=.env ./src/index.ts",
+        "ts:check": "tsc --noEmit",
+        "seed:dev": "prisma db seed",
+        "_comment:1": "llama a  node --env-file=.env ./src/config/db.seed.ts",
+        "db:push:test": "prisma db push --config prisma.test.config.ts",
+        "db:seed:test": "prisma db seed --config prisma.test.config.ts",
+        "seed:test": "npm run db:push:test && npm run db:seed:test",
+        "_comment:2": "llama a  node --env-file=.env.test ./src/config/db-test.seed.ts",
+        "test": "vitest",
+        "test:c": "vitest run --coverage",
+        "test:serie": "node --env-file=.env.test --test --test-concurrency=1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "module",
+    "dependencies": {
+        "@prisma/adapter-pg": "^7.7.0",
+        "@prisma/client": "^7.7.0",
+        "bcryptjs": "^3.0.3",
+        "cors": "^2.8.6",
+        "cross-env": "^10.1.0",
+        "debug": "^4.4.3",
+        "dotenv": "^17.4.2",
+        "express": "^5.2.1",
+        "gray-matter": "^4.0.3",
+        "jsonwebtoken": "^9.0.3",
+        "marked": "^18.0.2",
+        "morgan": "^1.10.1",
+        "pg": "^8.20.0",
+        "zod": "^4.3.6"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@types/cors": "^2.8.19",
+        "@types/debug": "^4.1.13",
+        "@types/express": "^5.0.6",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/morgan": "^1.9.10",
+        "@types/node": "^25.5.0",
+        "@types/pg": "^8.20.0",
+        "@vitest/coverage-v8": "^4.1.5",
+        "eslint": "^10.0.3",
+        "globals": "^17.4.0",
+        "prettier": "^3.8.1",
+        "prisma": "^7.7.0",
+        "prisma-zod-generator": "^2.1.4",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.57.0",
+        "vitest": "^4.1.5"
+    },
+    "prettier": {
+        "singleQuote": true
+    }
+}
