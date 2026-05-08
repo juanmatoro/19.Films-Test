@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Frontend</title>
+    <script>
+      const cloudinaryUrl = 'https://res.cloudinary.com/dip7gfqzk/image/upload';
+      const imagePath =
+        'v1701271616/6f723c82-860a-4ae0-9498-531177ea081a-sofia.jpg';
+      const params = ['f_auto'];
+      const url = `${cloudinaryUrl}/${params.join(',')}/${imagePath}`;
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1>Images from Cloudinary</h1>
+    </header>
+    <main>
+      <img src="" alt="Cloudinary Image" id="cloudinaryImage" width="400" />
+      <script>
+        document.querySelector('#cloudinaryImage').src = url;
+      </script>
+
+      <section>
+        <h2>Responsive Image</h2>
+        <img
+          src="https://res.cloudinary.com/dip7gfqzk/image/upload/c_scale,w_400/f_auto/q_auto/v1701271616/6f723c82-860a-4ae0-9498-531177ea081a-sofia.jpg"
+          srcset="
+            https://res.cloudinary.com/dip7gfqzk/image/upload/c_scale,w_320/f_auto/q_auto/v1701271616/6f723c82-860a-4ae0-9498-531177ea081a-sofia.jpg 320w,
+            https://res.cloudinary.com/dip7gfqzk/image/upload/c_scale,w_640/f_auto/q_auto/v1701271616/6f723c82-860a-4ae0-9498-531177ea081a-sofia.jpg 640w,
+            https://res.cloudinary.com/dip7gfqzk/image/upload/c_scale,w_960/f_auto/q_auto/v1701271616/6f723c82-860a-4ae0-9498-531177ea081a-sofia.jpg 960w,
+            https://res.cloudinary.com/dip7gfqzk/image/upload/c_scale,w_1280/f_auto/q_auto/v1701271616/6f723c82-860a-4ae0-9498-531177ea081a-sofia.jpg 1280w
+          "
+          sizes="(max-width: 1200px) 100vw, 400px"
+          alt="Sofia"
+          style="max-width: 100%; height: auto"
+        />
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2024 API Frontend. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
