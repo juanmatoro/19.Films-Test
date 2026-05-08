@@ -70,24 +70,41 @@ describe('Given AuthService', () => {
     const payload: TokenPayload = { id: 1, email: 'a@b.c', role: 'USER' };
 
     describe('When hash() and compare() are used', () => {
-        test('Then hash returns a non-empty string', async () => {
+        test('Then hash returns a valid bcrypt hash with cost 12', async () => {
             // ── Arrange ────────────────────────────────────────────────
-            // No hay setup adicional; `password` viene del scope superior.
-            // Se incluye el bloque vacío para mantener la estructura AAA
-            // visible en todos los tests por consistencia.
+            // `password` viene del scope superior.
 
             // ── Act ────────────────────────────────────────────────────
-            // Ejecutamos la unidad bajo test. Una sola llamada por test.
             const hash = await AuthService.hash(password);
 
             // ── Assert ─────────────────────────────────────────────────
-            // `toBeTypeOf` valida el tipo runtime via `typeof`. Útil cuando
-            // el contrato es solo "es un string", sin importar el contenido.
-            expect(hash).toBeTypeOf('string');
-            // El hash de bcrypt empieza por "$2a$..." — no afirmamos eso
-            // exacto para no acoplarnos al algoritmo concreto, pero sí que
-            // tenga longitud > 0.
-            expect(hash.length).toBeGreaterThan(0);
+            // 1) No debe ser la password en plano (transformación efectiva).
+            expect(hash).not.toBe(password);
+
+            // 2) Formato bcrypt completo:
+            //    $2[aby]$<cost>$<22 chars salt><31 chars hash>  → 60 chars
+            //    El [aby] cubre las distintas variantes del prefijo bcrypt.
+            //    El \d{2} captura el cost factor (rounds).
+            //    Los 53 chars finales son base64-bcrypt (incluye . y /).
+            expect(hash).toMatch(/^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/);
+
+            // 3) El cost factor debe ser 12 (== AuthService.saltRounds).
+            //    Si alguien baja saltRounds sin querer, este expect lo caza.
+            const [, , cost] = hash.split('$');
+            expect(Number(cost)).toBe(AuthService.saltRounds);
+        });
+
+        test('Then hash produces different output each call (salt is random)', async () => {
+            // ── Act ────────────────────────────────────────────────────
+            // Dos hashes de la MISMA password.
+            const hash1 = await AuthService.hash(password);
+            const hash2 = await AuthService.hash(password);
+
+            // ── Assert ─────────────────────────────────────────────────
+            // Si el salt no fuese aleatorio, ambos hashes serían idénticos
+            // y el sistema sería vulnerable a rainbow tables. Este test
+            // garantiza que cada llamada usa un salt distinto.
+            expect(hash1).not.toBe(hash2);
         });
 
         test('Then compare resolves true for the right password', async () => {
